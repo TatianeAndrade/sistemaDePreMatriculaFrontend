@@ -1,6 +1,7 @@
-<div class="disciplinas col-lg-8 offset-lg-2 col-xs-8">
-	<table ng-controller='disciplinaCtrl as disciplina' class="table">
+<div ng-controller='disciplinaCtrl as disciplina' class="disciplinas col-lg-8 offset-lg-2 col-xs-8">
+	<table  class="table table-striped" ng-repeat="matriz in disciplina">
 	  <thead class="thead-dark" style="border:none">
+	  	<tr>
 	      <th scope="col">Período</th>
 	      <th scope="col">Código</th>
 	      <th scope="col">Disciplina</th>
@@ -9,15 +10,14 @@
 	      <th></th>
 	    </tr>
 	  </thead>
-	  <tbody ng-repeat="dis in disciplina">
+	  <tbody ng-repeat="dis in matriz | orderBy: 'nome'">
 	    <tr>
-	      <th class="table-success" scope="row">{{dis.periodo}}</th>
-	      <td class="table-success">{{dis.codigo}}</td>
-	      <td class="table-success">{{dis.nome}}</td>
-	      <td class="table-success">{{dis.creditos}}</td>
-	      <td class="table-success">{{dis.grade}}</td>
-	      <td class="table-success"><input value="{{dis.codigo}}" type="checkbox"></input></td>
-	    </tr>
+	      <th class="table-info" scope="row">{{dis.periodo}}</th>
+	      <td class="table-info">{{dis.codigo}}</td>
+	      <td class="table-info">{{dis.nome}}</td>
+	      <td class="table-info">{{dis.creditos}}</td>
+	      <td class="table-info">{{dis.grade}}</td>
+	      <td class="table-info"><input value="{{dis.codigo}}" type="checkbox"></input></td>
 	    </tr>
 	  </tbody>
 	</table>

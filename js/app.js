@@ -32,7 +32,7 @@ app.config(function($routeProvider) {
 
 app.service('disciplinaService', function($http){
 	this.listar = function(){
-		return $http.get('http://localhost:8080/api/disciplina');
+		return $http.get('http://192.168.0.187:8080/api/disciplina');
 	}
 });
 
@@ -55,9 +55,27 @@ app.controller('coordenadorCtrl', function($scope) {
 });
 
 app.controller('disciplinaCtrl', function($scope, disciplinaService) {
-	$scope.disciplina = {}; 
+	$scope.disciplina = {};
 
 	disciplinaService.listar().then( function(resposta) {
-			$scope.disciplina = resposta.data;
+			let resp = resposta.data;
+			let periodos = [];
+			for (let i = 0; i < resp.length; i++) {
+					if(!periodos.includes(resp[i].periodo)){
+						periodos.push(resp[i].periodo);
+					}
+			}
+
+			periodos = periodos.sort((x, y) => {return x - y});
+			let disciplinas = [];
+
+			for(let i = 0; i < periodos.length; i++){
+				let periodo = resp.filter(function(value){
+					return value.periodo == periodos[i];
+				});
+				disciplinas.push(periodo);
+			}
+			console.log(periodos);
+			$scope.disciplina = disciplinas;
 		});
 });
