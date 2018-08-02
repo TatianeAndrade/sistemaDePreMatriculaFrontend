@@ -29,6 +29,13 @@ app.config(function($routeProvider) {
 	$routeProvider.otherwise({redirectTo: '/home'});
 });
 
+
+app.service('disciplinaService', function($http){
+	this.listar = function(){
+		return $http.get('http://localhost:8080/api/disciplina');
+	}
+});
+
 app.controller('homeCtrl', function($scope){
 	$scope.nome = 'Tatiane Andrade'
 	$scope.email = 'andrade92tatiane@gmail.com'
@@ -47,12 +54,10 @@ app.controller('coordenadorCtrl', function($scope) {
 	$scope.message = "Página coordenador."
 });
 
-app.controller('disciplinaCtrl', function($scope) {
-	$scope.disciplina= [
-		{Periodo: "1", Codigo:"2321323", Disciplina: "Leda", Creditos: "4", Grade: "Ambas"},
-		{Periodo: "1", Codigo:"4324324", Disciplina: "Leda", Creditos: "4", Grade: "Ambas"},
-		{Periodo: "1", Codigo:"5354543", Disciplina: "Leda", Creditos: "4", Grade: "Ambas"},
-		{Periodo: "1", Codigo:"5435345", Disciplina: "Leda", Creditos: "4", Grade: "Ambas"},
-		{Periodo: "1", Codigo:"5423542", Disciplina: "Leda", Creditos: "4", Grade: "Ambas"}
-	]
+app.controller('disciplinaCtrl', function($scope, disciplinaService) {
+	$scope.disciplina = {}; 
+
+	disciplinaService.listar().then( function(resposta) {
+			$scope.disciplina = resposta.data;
+		});
 });

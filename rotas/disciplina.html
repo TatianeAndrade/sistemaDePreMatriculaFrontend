@@ -1,6 +1,6 @@
-<div class="disciplinas">
+<div class="disciplinas col-lg-8 offset-lg-2 col-xs-8">
 	<table ng-controller='disciplinaCtrl as disciplina' class="table">
-	  <thead class="bg-success">
+	  <thead class="thead-dark" style="border:none">
 	      <th scope="col">Período</th>
 	      <th scope="col">Código</th>
 	      <th scope="col">Disciplina</th>
@@ -11,12 +11,12 @@
 	  </thead>
 	  <tbody ng-repeat="dis in disciplina">
 	    <tr>
-	      <th class="table-success" scope="row">{{dis.Periodo}}</th>
-	      <td class="table-success">{{dis.Codigo}}</td>
-	      <td class="table-success">{{dis.Disciplina}}</td>
-	      <td class="table-success">{{dis.Creditos}}</td>
-	      <td class="table-success">{{dis.Grade}}</td>
-	      <td class="table-success"><input type="checkbox"></input></td>
+	      <th class="table-success" scope="row">{{dis.periodo}}</th>
+	      <td class="table-success">{{dis.codigo}}</td>
+	      <td class="table-success">{{dis.nome}}</td>
+	      <td class="table-success">{{dis.creditos}}</td>
+	      <td class="table-success">{{dis.grade}}</td>
+	      <td class="table-success"><input value="{{dis.codigo}}" type="checkbox"></input></td>
 	    </tr>
 	    </tr>
 	  </tbody>
