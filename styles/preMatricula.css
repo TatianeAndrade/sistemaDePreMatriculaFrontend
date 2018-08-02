@@ -32,6 +32,10 @@ html {
 	cursor: pointer;
 }
 
+.logoCCC{
+	width: 110px;
+}
+
 .titulo{
 	display: flex;
 	justify-content: center;
