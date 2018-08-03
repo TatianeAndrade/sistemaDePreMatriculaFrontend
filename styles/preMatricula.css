@@ -5,7 +5,7 @@ html {
     width: 100%;
 }
 
-body{
+.body{
 	background: rgba(11, 50, 89, 0.1);
 	display: flex;
 	align-content: center;
@@ -18,9 +18,11 @@ body{
 }
 
 .login{
-	height: auto;
+	width: 100%;
+	min-height: 100%;
 	display: flex;
 	align-items: center;
+	justify-content: center;
 }
 .btn-login{
 	display: flex;
@@ -50,9 +52,7 @@ body{
 	font-family: 'Roboto', sans-serif; 
 }
 
-.cadastro{
-	margin-top:-250px;
-}
+
 .form-control{
 	margin-bottom: 10px;
 }

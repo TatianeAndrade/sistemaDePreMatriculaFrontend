@@ -3,20 +3,21 @@
 	<span class="titulo" style="color: #fff">Cadastro</span>
 </div>
 
-<div class="cadastro col-lg-4 offset-lg-4">
+<div ng-controller='cadastroCtrl as cad' class="cadastro col-lg-4 offset-lg-4">
+	{{cad.nome}}
 	<div class="form-control">
 		{{nome}}  
 	</div>
 	<div class="form-control">
 		{{email}}  
 	</div>
-	<form id="cadastro">
-		<input class="form-control" type="text" name="matricula" placeholder="Digite sua matricula">
-		<select class="form-control">
-			<option>
+	<form ng-submit="cadastrar()" id="cadastro">
+		<input class="form-control" type="text" ng-model="matricula" name="matricula" value="" placeholder="Digite sua matricula">
+		<select ng-model="grade" class="form-control">
+			<option value="Nova">
 				Grade Nova
 			</option>
-			<option>
+			<option value="Antiga">
 				Grade Antiga
 			</option>
 		</select>

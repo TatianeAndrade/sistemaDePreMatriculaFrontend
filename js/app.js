@@ -31,19 +31,75 @@ app.config(function($routeProvider) {
 
 
 app.service('disciplinaService', function($http){
-	this.listar = function(){
-		return $http.get('http://192.168.0.187:8080/api/disciplina');
+	this.listar = function(id){
+		console.log(id);
+		return $http.get('http://localhost:8080/api/disciplina', {headers:{'token-autentication': `${id}`}});
 	}
 });
 
-app.controller('homeCtrl', function($scope){
-	$scope.nome = 'Tatiane Andrade'
-	$scope.email = 'andrade92tatiane@gmail.com'
+app.service('loginService', function($http){
+	let login = this;
+	login.listar = function(id){
+		return $http.get('http://localhost:8080/api/usuario/login/'+id);
+	}
+	login.cadastrar = function(data){
+		let data2 = JSON.stringify(data);
+		$http.post('http://localhost:8080/api/usuario', data2, {headers:{'token-autentication': `${login.id_token}`}});	
+	}
 });
 
-app.controller('cadastroCtrl', function($scope) {
+app.controller('homeCtrl', function($scope, loginService, $location){
 	$scope.nome = 'Tatiane Andrade'
 	$scope.email = 'andrade92tatiane@gmail.com'
+	$scope.token = ''
+	var googleUser = {};
+	  var startApp = function() {
+	    gapi.load('auth2', function(){
+	      // Retrieve the singleton for the GoogleAuth library and set up the client.
+	      auth2 = gapi.auth2.init({
+	        client_id: '594906753462-rkhlero91bddrg1kqodqtk7qp4nbglmm.apps.googleusercontent.com',
+	        cookiepolicy: 'single_host_origin',
+	        // Request scopes in addition to 'profile' and 'email'
+	        //scope: 'additional_scope'
+	      });
+	      attachSignin(document.getElementById('customBtn'));
+	    });
+	  };
+
+	  function attachSignin(element) {
+	    console.log(element.id);
+	    auth2.attachClickHandler(element, {},
+	        function(googleUser) {
+	        	let profile = googleUser.getBasicProfile();
+	        	loginService.id_token = googleUser.getAuthResponse().id_token;
+	        	let usuario = loginService.listar(loginService.id_token).then(function(resp){
+					console.log(resp.data);
+				});
+				if(usuario.matricula == null){
+					loginService.email = profile.getEmail();
+					loginService.nome =  profile.getName();
+					$location.path('/cadastro');
+				}
+	        }, function(error) {
+	          alert(JSON.stringify(error, undefined, 2));
+	        });
+	  }
+	startApp()
+});
+
+app.controller('cadastroCtrl', function($scope, loginService) {
+	
+	$scope.nome = loginService.nome;
+	$scope.email = loginService.email;
+	$scope.cadastrar = function(){
+		let usuario = {
+			nome : $scope.nome,
+			email: $scope.email,
+			matricula: $scope.matricula,
+			grade: $scope.grade
+		}
+		loginService.cadastrar(usuario);
+	}
 });
 
 app.controller('alunoCtrl', function($scope) {
@@ -54,10 +110,10 @@ app.controller('coordenadorCtrl', function($scope) {
 	$scope.message = "Página coordenador."
 });
 
-app.controller('disciplinaCtrl', function($scope, disciplinaService) {
+app.controller('disciplinaCtrl', function($scope, disciplinaService, loginService ) {
 	$scope.disciplina = {};
 
-	disciplinaService.listar().then( function(resposta) {
+	disciplinaService.listar(loginService.token).then( function(resposta) {
 			let resp = resposta.data;
 			let periodos = [];
 			for (let i = 0; i < resp.length; i++) {
@@ -78,4 +134,8 @@ app.controller('disciplinaCtrl', function($scope, disciplinaService) {
 			console.log(periodos);
 			$scope.disciplina = disciplinas;
 		});
+});
+
+app.factory('ApiResource', function($resource, $http){
+	var uri = 'localhost:8080/api';
 });
